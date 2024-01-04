@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 const Form = () => {
 
     const [mail, setMail] = useState('');
+    const [subscribe, setSubscribe] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,8 +18,11 @@ const Form = () => {
                 body: JSON.stringify({ email: mail }), // Sending the email in the request body
             });
 
+            setSubscribe(true); // Update subscribed state on successful subscription
+
             const json = await res.json();
             console.log(json);
+
         } catch (error) {
             console.error("Error:", error);
         }
@@ -32,19 +36,26 @@ const Form = () => {
                     <p className='inline sm:block lg:inline'>Sing up for out newsletter</p>
                 </div>
                 <form onSubmit={handleSubmit} className='w-full max-w-md col-span-5 lg:py-2'>
-                    <div className='flex gap-x-3'>
-                        <label htmlFor="email-address" className="sr-only">Email address</label>
-                        <input
-                            id="email-address"
-                            name="email"
-                            type="email"
-                            autoComplete="email"
-                            required
-                            value={mail}
-                            onChange={(e) => setMail(e.target.value)}
-                            className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-black shadow-sm ring-1 ring-inset ring-black/70 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" placeholder="Enter your email" />
-                        <button type="submit" className="flex-none rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Subscribe</button>
-                    </div>
+                    {subscribe ? (
+                        <div>
+                            <button type="submit" className="flex-none rounded-md bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Thank you for subscribing!</button>
+                        </div>
+                    ) : (
+                        <div className='flex gap-x-3'>
+                            <label htmlFor="email-address" className="sr-only">Email address</label>
+                            <input
+                                id="email-address"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                required
+                                value={mail}
+                                onChange={(e) => setMail(e.target.value)}
+                                className="min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-black shadow-sm ring-1 ring-inset ring-black/70 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" placeholder="Enter your email" />
+                            <button type="submit" className="flex-none rounded-md bg-blue-700 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">Subscribe</button>
+                        </div>
+                    )}
+
                     <p className='mt-4 text-sm text-gray-700'>
                         We care about your data. Read our
                         <span className='text-blue-800'>
